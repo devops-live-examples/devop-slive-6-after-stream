@@ -2,6 +2,15 @@
 
 # DevOps Live #6
 
+## Training
+
+- Kubernetes - https://ondrej-sika.cz/skoleni/kubernetes
+- Terraform - https://ondrej-sika.cz/skoleni/terraform
+
+## Related Repositories
+
+- Setup of Kubernetes Cluster using Terraform - https://github.com/ondrejsika/terraform-do-kubernetes-example
+
 ## Quick start
 
 Apply Terraform manifests
