@@ -13,31 +13,92 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-locals {
-  cf01_eu_zone_id = "4e889696e079215601fe7a522126b87e"
+resource "cloudflare_zone" "cf01_eu" {
+  zone = "cf01.eu"
+}
+
+output "cf01_eu_name_servers" {
+  value = cloudflare_zone.cf01_eu.name_servers
 }
 
 resource "cloudflare_zone_settings_override" "cf01_eu" {
-  zone_id = local.cf01_eu_zone_id
+  zone_id = cloudflare_zone.cf01_eu.id
   settings {
-    automatic_https_rewrites = "on"
+    automatic_https_rewrites = "off"
     ssl                      = "full"
   }
 }
 
 resource "cloudflare_record" "cf01_eu" {
-  zone_id = local.cf01_eu_zone_id
+  zone_id = cloudflare_zone.cf01_eu.id
   name    = "@"
-  value   = "139.59.205.101"
+  value   = "91.121.89.212"
   type    = "A"
   ttl     = 1
   proxied = true
 }
 
 resource "cloudflare_record" "www_cf01_eu" {
-  zone_id = local.cf01_eu_zone_id
+  zone_id = cloudflare_zone.cf01_eu.id
   name    = "www"
   value   = cloudflare_record.cf01_eu.hostname
+  type    = "CNAME"
+  ttl     = 1
+  proxied = true
+}
+
+
+resource "cloudflare_record" "foo_cf01_eu" {
+  zone_id = cloudflare_zone.cf01_eu.id
+  name    = "foo"
+  value   = cloudflare_record.cf01_eu.hostname
+  type    = "CNAME"
+  ttl     = 1
+  proxied = true
+}
+
+resource "cloudflare_page_rule" "foobar" {
+  zone_id  = cloudflare_zone.cf01_eu.id
+  target   = "foo.cf01.eu/*"
+  priority = 1
+
+  actions {
+    forwarding_url {
+      url         = "https://cf01.eu"
+      status_code = 301
+    }
+  }
+}
+
+resource "cloudflare_zone" "cf03_eu" {
+  zone = "cf03.eu"
+}
+
+output "cf03_eu_name_servers" {
+  value = cloudflare_zone.cf03_eu.name_servers
+}
+
+resource "cloudflare_zone_settings_override" "cf03_eu" {
+  zone_id = cloudflare_zone.cf03_eu.id
+  settings {
+    automatic_https_rewrites = "on"
+    ssl                      = "full"
+  }
+}
+
+resource "cloudflare_record" "cf03_eu" {
+  zone_id = cloudflare_zone.cf03_eu.id
+  name    = "@"
+  value   = "91.121.89.212"
+  type    = "A"
+  ttl     = 1
+  proxied = true
+}
+
+resource "cloudflare_record" "www_cf04_eu" {
+  zone_id = cloudflare_zone.cf03_eu.id
+  name    = "www"
+  value   = cloudflare_record.cf03_eu.hostname
   type    = "CNAME"
   ttl     = 1
   proxied = true

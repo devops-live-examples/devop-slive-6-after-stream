@@ -1,3 +1,5 @@
+> This repo contains changes made during live stream. Source repo is [ondrejsika/devops-live-6](https://github.com/ondrejsika/devops-live-6).
+
 [DevOps Live](https://devopslive.cz) | [Ondrej Sika (sika.io)](https://sika.io) | <ondrej@sika.io>
 
 # DevOps Live #6
